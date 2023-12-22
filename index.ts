@@ -17,7 +17,7 @@ function rand(min: number, max: number): number {
 }
 
 
-// Returns the number of weeks given x number of months
+// Returns the number of weeks in x number of months
 function calculateWeeksFromMonths(months: number): number {
   // Assuming a month is approximately 4.33 weeks
   const weeksInAMonth = 4.33;

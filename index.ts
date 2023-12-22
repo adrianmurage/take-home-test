@@ -114,7 +114,7 @@ function runSimulation(): void {
   console.log(`Tubes replaced in a year in that classroom: ${tubesReplaced}`);
 }
 
-function getCostPerYearPerClassroom() {
+function getCostPerYearPerClassroom(): void {
   const numOfSimulationsToRun = 10;
   let counter = 0;
   let totalCost = 0;

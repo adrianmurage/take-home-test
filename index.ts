@@ -9,22 +9,26 @@ const COST_OF_FLUORESCENT_TUBE = 7;
 const MIN_WORKING_HOURS = 100;
 const MAX_WORKING_HOURS = 200;
 
-/* utility functions */
+/* utility methods */
 
+// Returns an integer from min - max (inclusive of both min and max)
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+
+// Returns the number of weeks given x number of months
 function calculateWeeksFromMonths(months: number): number {
   // Assuming a month is approximately 4.33 weeks
   const weeksInAMonth = 4.33;
   const weeks = months * weeksInAMonth;
-  // Round up weeks to make sure we're never under estimating the time
+  // Round up the value of weeks to make sure we're never under estimating the time
   const roundedUpWeeks = Math.ceil(weeks);
 
   return roundedUpWeeks;
 }
 
+// Returns the total hours given the relevant hours per day, days per week, weeks per year
 function calculateTotalHours(
   hoursPerDay: number,
   daysPerWeek: number,
@@ -34,7 +38,7 @@ function calculateTotalHours(
   return totalHours;
 }
 
-/* utility functions */
+/* utility methods */
 
 class FluorescentTube {
   hoursToFailure: number;
@@ -46,13 +50,14 @@ class FluorescentTube {
 
 class TubeUnit {
   tubes: FluorescentTube[] = [];
-  tubesReplaced: number = 0;
+  tubesReplaced = 0;
 
   constructor() {
     this.changeTubes();
   }
 
   changeTubes() {
+    // Empty the tube unit before adding new tubes
     this.tubes = [];
     for (let i = 0; i < NUM_OF_FLUORESCENT_TUBES_IN_UNIT; i++) {
       this.tubes.push(new FluorescentTube());
@@ -61,6 +66,10 @@ class TubeUnit {
 
   run(hours: number) {
     while (hours > 0) {
+
+      // Once 2 fluorescent tubes fail in a single unit, you should replace all 4 tubes.
+      // Sort the array of tubes and pick out the second one
+      // which will reflect the time it took for the first 2 tubes to fail
       this.tubes.sort((a, b) => a.hoursToFailure - b.hoursToFailure);
       const index2 = this.tubes[1];
 
@@ -133,3 +142,4 @@ function getCostPerYearPerClassroom() {
 
 runSimulation()
 getCostPerYearPerClassroom()
+

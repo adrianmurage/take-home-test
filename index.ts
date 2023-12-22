@@ -16,7 +16,6 @@ function rand(min: number, max: number): number {
 }
 
 function calculateWeeksFromMonths(months: number): number {
-
   // Assuming a month is approximately 4.33 weeks
   const weeksInAMonth = 4.33;
   const weeks = months * weeksInAMonth;
@@ -50,11 +49,11 @@ class TubeUnit {
   tubesReplaced: number = 0;
 
   constructor() {
-    this.changeTubes()
+    this.changeTubes();
   }
 
   changeTubes() {
-    this.tubes = []
+    this.tubes = [];
     for (let i = 0; i < NUM_OF_FLUORESCENT_TUBES_IN_UNIT; i++) {
       this.tubes.push(new FluorescentTube());
     }
@@ -63,12 +62,11 @@ class TubeUnit {
   run(hours: number) {
     while (hours > 0) {
       this.tubes.sort((a, b) => a.hoursToFailure - b.hoursToFailure);
-      console.log(this.tubes)
       const index2 = this.tubes[1];
 
       hours -= index2.hoursToFailure;
       this.tubesReplaced += NUM_OF_FLUORESCENT_TUBES_IN_UNIT;
-      this.changeTubes()
+      this.changeTubes();
     }
   }
 }
@@ -93,15 +91,45 @@ class Classroom {
   }
 }
 
-const hoursToRunClassroom = calculateTotalHours(
-  NUM_OF_HOURS_IN_A_DAY,
-  NUM_OF_TIMES_IN_A_WEEK,
-  calculateWeeksFromMonths(NUM_OF_MONTHS_IN_A_YEAR)
-);
+function runSimulation(): void {
+  const hoursToRunClassroom = calculateTotalHours(
+    NUM_OF_HOURS_IN_A_DAY,
+    NUM_OF_TIMES_IN_A_WEEK,
+    calculateWeeksFromMonths(NUM_OF_MONTHS_IN_A_YEAR)
+  );
 
-const classroom = new Classroom();
-classroom.run(hoursToRunClassroom);
-const tubesReplaced = classroom.getTotalTubesReplaced();
+  const classroom = new Classroom();
+  classroom.run(hoursToRunClassroom);
+  const tubesReplaced = classroom.getTotalTubesReplaced();
 
-console.log(`Tubes replaced in a year: ${tubesReplaced}`);
-console.log(`Cost per year: $${tubesReplaced * COST_OF_FLUORESCENT_TUBE}`);
+  console.log(`Tubes replaced in a year in that classroom: ${tubesReplaced}`);
+}
+
+function getCostPerYearPerClassroom() {
+  const numOfSimulationsToRun = 10;
+  let counter = 0;
+  let totalCost = 0;
+
+  while (numOfSimulationsToRun > counter) {
+    const hoursToRunClassroom = calculateTotalHours(
+      NUM_OF_HOURS_IN_A_DAY,
+      NUM_OF_TIMES_IN_A_WEEK,
+      calculateWeeksFromMonths(NUM_OF_MONTHS_IN_A_YEAR)
+    );
+
+    const classroom = new Classroom();
+    classroom.run(hoursToRunClassroom);
+    const tubesReplaced = classroom.getTotalTubesReplaced();
+
+    const costOfReplacements = tubesReplaced * COST_OF_FLUORESCENT_TUBE;
+    totalCost += costOfReplacements;
+    counter++;
+  }
+
+  const averageCost = totalCost / numOfSimulationsToRun;
+
+  console.log(`Cost per year per classroom: $${averageCost}`);
+}
+
+runSimulation()
+getCostPerYearPerClassroom()
